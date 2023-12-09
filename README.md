@@ -1,27 +1,19 @@
-<a href="Linux/README.md" style="text-decoration: none; color: inherit;">
-  <div style="display: flex; align-items: center;">
-    <img src="static/linux.png" alt="Linux" style="max-width: 10%; height: auto; margin-right: 10px;">
-    <span>Linux</span>
-  </div>
-</a>
+# Technologies
 
-<a href="Git/README.md" style="text-decoration: none; color: inherit;">
-  <div style="display: flex; align-items: center;">
-    <img src="static/git.png" alt="Git" style="max-width: 10%; height: auto; margin-right: 10px;">
-    <span>Git</span>
-  </div>
-</a>
+Привет! Здесь я собрал краткую информацию о нескольких технологиях. Каждая из них имеет свой собственный раздел для теории и практики.
 
-<a href="Docker/README.md" style="text-decoration: none; color: inherit;">
-  <div style="display: flex; align-items: center;">
-    <img src="static/docker.png" alt="Docker" style="max-width: 10%; height: auto; margin-right: 10px;">
-    <span>Docker</span>
-  </div>
-</a>
+## Linux
 
-<a href="CI_CD/README.md" style="text-decoration: none; color: inherit;">
-  <div style="display: flex; align-items: center;">
-    <img src="static/ci_cd.png" alt="CI/CD" style="max-width: 10%; height: auto; margin-right: 10px;">
-    <span>CI/CD</span>
-  </div>
-</a>
+Описание и основные команды о Linux. [Linux](Linux/README.md)
+
+## Git
+
+Информация о системе контроля версий Git и как ей пользоваться. [Git](Git/README.md)
+
+## Docker
+
+Основные команды Docker. [Git](Docker/README.md)
+
+## CI/CD
+
+Обзор инструментов Continuous Integration и Continuous Deployment/Delivery. [CI/CD](CI_CD/README.md)
