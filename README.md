@@ -12,8 +12,9 @@
 
 ## Docker
 
-Основные команды Docker. [Git](Docker/README.md)
+Основные команды Docker. [Docker](Docker/README.md)
 
 ## CI/CD
 
-Обзор инструментов Continuous Integration и Continuous Deployment/Delivery. [CI/CD](CI_CD/README.md)
+Обзор инструментов Continuous Integration и Continuous Deployment/Delivery. 
+- [Github Actions](CI_CD/Github_actions/README.md)
