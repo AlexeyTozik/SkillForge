@@ -10,6 +10,9 @@
 
 Информация о системе контроля версий Git и как ей пользоваться. [Git](Git/README.md)
 
+- [Онлайн тренажёр](https://learngitbranching.js.org/)
+
+
 ## Docker
 
 Основные команды Docker. [Docker](Docker/README.md)
