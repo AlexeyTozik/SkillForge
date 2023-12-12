@@ -12,10 +12,11 @@
 
 - [Онлайн тренажёр](https://learngitbranching.js.org/)
 
-
 ## Docker
 
 Основные команды Docker. [Docker](Docker/README.md)
+Что почитать?
+- [Docker Deep Dive](Books/Docker%20Deep%20Dive.pdf)
 
 ## CI/CD
 
