@@ -1,0 +1,3 @@
+[my_hosts]
+192.168.0.105   ansible_user=user
+192.168.0.106   ansible_user=user1

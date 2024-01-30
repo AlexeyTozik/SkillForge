@@ -24,7 +24,12 @@
 Обзор инструментов Continuous Integration и Continuous Deployment/Delivery. 
 - [Github Actions](CI_CD/Github_actions/README.md)
 
+## MySQL
 
+Основные команды 
+- [MySQL](MySQL/README.md)
 
+## Ansible
 
-[Title](../devops_roadmap.pdf)
+Основные команды и элементы playbook 
+- [Ansible](Ansible/README.md)
