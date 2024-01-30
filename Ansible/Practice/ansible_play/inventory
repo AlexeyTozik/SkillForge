@@ -1,3 +1,4 @@
 [my_hosts]
-192.168.0.105   ansible_user=user
-192.168.0.106   ansible_user=user1
+192.168.0.105   ansible_user=user   apache_package=apache2 php_package=libapache2-mod-php
+192.168.0.106   ansible_user=user1  apache_package=apache2 php_package=libapache2-mod-php
+
