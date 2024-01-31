@@ -21,6 +21,7 @@
   tasks:
 
   - name: install apache and php
+    tags: debian,apache,php
     apt: 
       name: 
         - apache2
@@ -29,6 +30,7 @@
     when: ansible_distribution == "Debian"
 
   - name: install apache and php
+    tags: centos,apache,php
     dnf:
       name: 
         - httpd
@@ -41,12 +43,14 @@
   tasks:
 
     - name: install MariaDB (Ubuntu)
+      tags: ubuntu,mariadb
       apt:
         name: mariadb-server
         state: latest
       when: ansible_distribution == "Debian"
 
     - name: install MariaDB (CentOS)
+      tags: centos,mariadb
       dnf: 
         name: mariadb
         state: latest
