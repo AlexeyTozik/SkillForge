@@ -4,7 +4,7 @@
   become: true
   pre_tasks:
 
-    - name: install updates (Ubuntu)
+    - name: install updates (Debian)
       apt:
         upgrade: dist
         update_cache: yes
@@ -61,6 +61,38 @@
       owner: root
       group: root 
       remote_src: false  
+
+  - name: Start apache2 service
+    tags: debian,apache
+    service:
+      name: apache2
+      state: started
+      enabled: true
+    when: ansible_distribution == "Debian"
+
+  - name: Start httpd service
+    tags: centos,httpd
+    service:
+      name: httpd
+      state: started
+      enabled: true
+    when: ansible_distribution == "CentOS"
+
+  - name: Ensure the default Apache port is 8080
+    lineinfile:
+      path: /etc/apache2/ports.conf
+      regexp: '^Listen '
+      insertafter: '^#Listen '
+      line: Listen 80
+    when: ansible_distribution == "Debian"
+    register: apache2
+
+  - name: Restart apache2 service
+    tags: debian,apache
+    service: 
+      name: apache2
+      state: restarted
+    when: apache2.changed
 
 - hosts: db_servers
   become: true
