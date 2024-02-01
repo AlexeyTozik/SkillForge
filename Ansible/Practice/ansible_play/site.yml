@@ -37,6 +37,30 @@
         - php
       state: latest
     when: ansible_distribution == "CentOS"
+  
+  - name: copy html file for the site
+    tags: debian,centos,apache,php
+    copy:
+      src: files/standard.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: '0644'
+
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: unarchive test local file
+    tags: debian,centos,archive
+    unarchive: 
+      src: files/prerer.zip
+      dest: /home
+      mode: '0755'
+      owner: root
+      group: root 
+      remote_src: false  
 
 - hosts: db_servers
   become: true
