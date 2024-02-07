@@ -50,5 +50,5 @@
   service:
     name: "{{ apache_service }}"
     state: restarted
-  when: apache2.changed
+ 
 
