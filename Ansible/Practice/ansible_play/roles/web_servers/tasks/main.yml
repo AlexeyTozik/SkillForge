@@ -1,20 +1,10 @@
 - name: install apache and php
-  tags: debian,apache,php
-  apt:
+  tags: apache,php
+  package:
     name:
-      - apache2
-      - libapache2-mod-php       
+      - "{{ apache_package_name }}"
+      - "{{ php_package_name }}"       
     state: latest
-  when: ansible_distribution == "Debian"
-  
-- name: install apache and php
-  tags: centos,apache,php
-  dnf:
-    name:
-      - httpd
-      - php
-    state: latest
-  when: ansible_distribution == "CentOS"
   
 - name: copy html file for the site
   tags: debian,centos,apache,php
@@ -40,21 +30,12 @@
     group: root
     remote_src: false
   
-- name: Start apache2 service
-  tags: debian,apache
+- name: Start apache service
+  tags: apache
   service:
-    name: apache2
+    name: "{{ apache_service }}"
     state: started
     enabled: true
-  when: ansible_distribution == "Debian"
-  
-- name: Start httpd service
-  tags: centos,httpd
-  service:
-    name: httpd
-    state: started
-    enabled: true
-  when: ansible_distribution == "CentOS"
  
 - name: Ensure the default Apache port is 8080
   lineinfile:
@@ -62,13 +43,12 @@
     regexp: '^Listen '
     insertafter: '^#Listen '
     line: Listen 80
-  when: ansible_distribution == "Debian"
-  register: apache2
+  notify: restart_apache 
 
-- name: Restart apache2 service
-  tags: debian,apache
+- name: Restart apache service
+  tags: apache
   service:
-    name: apache2
+    name: "{{ apache_service }}"
     state: restarted
   when: apache2.changed
 
