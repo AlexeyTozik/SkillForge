@@ -9,7 +9,7 @@
 | <b>git log</b> | Показывает историю коммитов  |
 | <b>git diff [data]</b><br><br>git diff abc123 def456<br>git diff index.html<br>git diff feature-branch master | Используется для просмотра изменений между коммитами, рабочими каталогами или ветками [data] |
 | <b>git branch [branch]</b><br><br>git branch<br>git branch feature-branch | Используется для создания веток в Git и просмотра всех (без аргументов) |
-| <b>git chechout [branch]</b><br><br>git checkout main<br>git checkout -b feature-branch | Используется для переключения между ветками, создания новых (и переключение на них) |
+| <b>git checkout [branch]</b><br><br>git checkout main<br>git checkout -b feature-branch | Используется для переключения между ветками, создания новых (и переключение на них) |
 | <b>git pull [remote]</b><br><branch><br>git pull origin main | Получение изменений из удаленного репозитория и автоматического объединения их с текущей веткой<br>Можно заменить на git fetch + git merge |
 | <b>git push [remote] [branch]</b><br><br>git push origin main <br><i># Отправка новой ветки на удалённый репозиторий:</i><br>git push -u origin feature-branch | Используется для отправки изменений из локального репозитория в удаленный репозиторий |
 | <b>git merge [branch_name]</b><br><br>git merge --abort<br>git merge --continue | Используется для объединения изменений из  [branch_name] в текущую |
