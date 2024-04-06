@@ -24,6 +24,7 @@
 
 💥 [Linux Bible (ru)](Books/bibliya-linux-10-e-izdanie-linux-bible-10th-edition_RuLit_Me_679437.pdf)<br>
 💥 [Системное и сетевое администрирование. Практическое руководство](Books/Sistemnoe_I_Setevoe_Administrirovanie_Prakticheskoe_Rukovodstvo_2-E_Izdanie.pdf)<br>
+💥 [Cheatsheet CLI от Canonitial (2024)](Books/Ubuntu%20Server%20CLI%20cheat%20sheet%202024%20v6.pdf)
 
 ---
 
@@ -44,9 +45,25 @@
 
 ---
 
-## MySQL
+## Databases
+
+### Redis
+
+### MongoDB
+
+### MySQL
 
 🌀 [Основные команды](MySQL/README.md)<br>
+
+Общая теория:
+
+💥 [Шарнирование]()
+💥 Секционирование
+💥 Организация хранища данных
+💥 Транзакции
+💥 Уровни изоляции
+💥 Типы соединений (hash, nested, loop, merge)
+💥 NoSQL
 
 ---
 
