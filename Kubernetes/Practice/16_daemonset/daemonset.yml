@@ -1,0 +1,55 @@
+---
+# На каждой ноде автоматически запускается агент
+# Управляются агенты из одной точки
+# Конфигурируются так же из одной точки
+
+# Является альтернативой Deployment
+# Запускает поды на всех нодах кластера
+# При добавлении ноды - добавляет под
+# При удалении ноды GC удаляет под
+
+# Best practices:
+# runAsNonRoot - запускать не под root
+# runAsUser - запускать под указанным юзером
+
+# tolerations - позволяет запускать на определённых нодах
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: node-exporter
+  name: node-exporter
+spec:
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      containers:
+      - name: node-exporter
+        image: k8s.gcr.io/pause:3.3
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 10m
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      nodeSelector:
+        kubernetes.io/os: linux
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/ingress
+...

@@ -1,0 +1,45 @@
+---
+# Временный диск, который создаётся на сервере и в этот катало записываются некие данные
+# Аналог volumes, только если удалим POD, удалится и emptydir
+# [+] Отличино подходит для тестов
+
+# Смонтируется volume emptyDir с именем data
+
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.12
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 50m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: data
+          mountPath: /files
+      volumes:
+      - name: data
+        emptyDir: {}
+...

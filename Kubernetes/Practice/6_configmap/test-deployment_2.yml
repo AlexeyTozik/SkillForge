@@ -1,0 +1,45 @@
+---
+# volumes - подключение volume. Их может быть несколько. Можно подключить один и тот же в несколько контейнеров
+# volumeMounts - конкретно в контейнер
+
+# При подключении configmap_2 поле default.conf превратиться в файл с таким именем и содержимым переменной описанной в файле и смонтируется по указанному пути
+
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.12
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 50m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/conf.d/
+      volumes:
+      - name: config
+        configMap:
+          name: my-configmap
+...

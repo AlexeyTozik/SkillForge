@@ -1,0 +1,11 @@
+---
+# Storage класс, который требует ручного вмешательства (не создаёт ничего автоматически)
+# Если здесь будет provisioner, то не нужно будет руками создавать pv, они будут автоматически, как только будет создаваться PVC
+
+kind: StorageClass
+apiVersion: v1
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+...

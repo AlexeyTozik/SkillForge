@@ -1,0 +1,25 @@
+---
+# ReadWriteMany - читать и писать из нескольких источников
+# ReadWriteMany - только с одного
+# storageClassName - для обращения к конкретному storage (ssd, hdd)
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fileshare
+spec:
+  storageClassName:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    request:
+      storage: 1Gi
+
+
+
+# Storage Request: 1Gi
+# Access modes: ReadWriteMany
+# pvc name = jekyll-site, namespace = development
+# 'jekyll-site' PVC should be bound to the PersistentVolume called 'jekyll-site'.
+
+...

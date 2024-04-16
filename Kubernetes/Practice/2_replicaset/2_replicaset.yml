@@ -1,0 +1,42 @@
+---
+# Запустите replicaset из файла replicaset.yaml
+# kubectl create -f 2_replicaset.yml
+
+# Информация о всех replicaset и pods
+# kubectl get rs
+# kubectl get po
+
+# Увеличьте количество реплик в replicaset'е до трёх
+# kubectl scale replicaset my-replicaset --replicas 3
+# kubectl get po
+
+# Удалить все поды
+# kubectl delete pod --all
+
+# команда обращается к кластеру, получает описание объекта, вносим изменения, kubectl отправляет все изменения
+# kubectl edit replicaset my-replicaset
+
+# описание объекта
+# kubectl describe pod my-replicaset-<TAG>
+# kubectl describe rs my-pelicaset
+
+apiVersion: app/v1
+kind: ReplicaSet
+metadata:
+  name: my-replicaset
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.12
+        name: nginx
+        ports:
+        - containerPort: 80
+...

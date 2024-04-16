@@ -1,0 +1,27 @@
+---
+# /local/pv1 каталог не создастся по умолчанию, поэтому идём на хост и создаёт руками
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: node1-pv1
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /local/pv1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - alexis-PC
+
+...

@@ -1,0 +1,40 @@
+---
+# kubectl -f 3_deployment.yml
+
+# kubectl set image deployment my-deployment '*=nginx:1.13'
+
+# Для документации
+# kubectl explain deployment.spec.strategy
+
+# strategy
+# rollingUpdate - постепенный переход и удаление
+# recreate - при обновлении удали все старые, а на их месте создай новые
+# maxSurge - количество, на которое мы можем поднять количество реплик, относительно replicas (можно в %)
+# maxUnavailable - количество, на которое мы можем опустить количество реплик, относительно replicas (можно в %)
+
+
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.12
+        name: nginx
+        ports:
+        - containerPort: 80
+...

@@ -1,0 +1,38 @@
+---
+# Job
+
+# Создаёт POD для выполнения задачи
+# Перезапускает PODы до успешного выполнения задачи или с течением таймаутов
+
+# backoffLimit - количество попыток
+# activeDeadlineSeconds - временной промежуток, в рамках которого job должен выполниться успешно
+# restartPolicy Never в Job, чтобы в случае проблемы job не перезапускался
+
+# kubectl get jobs.batch (или по job)
+
+# Создание job'а провоцирует создание POD'а
+# Job сами по себе не удаляются
+# 1. Можно удалять руками
+# 2. ttlSecondsAfterFinished
+
+# Почитать спецификацию абстракции
+# kubectl explain <что именно>
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 60
+  template:
+    spec:
+      containers:
+      - name: hello
+        image: quay.io/prometheus/busybox
+        args:
+        - /bin/sh
+        - -c
+        - date; echo Hello from the Kubernetes cluster
+      restartPolicy: Never
+...
