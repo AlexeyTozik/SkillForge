@@ -1,0 +1,44 @@
+---
+
+# envFrom - задать источник, откуда подтягивать env и какие-то настройки
+
+# Вывести все configmap'ы
+# kubectl get cm
+
+# Создать configmap
+# kuberctl -f configmap.yml
+
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.12
+        name: nginx
+        env:
+        - name: TEST
+          value: foo
+        envFrom:
+        - configMapRef:
+            name: my-configmap-env
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 50m
+...

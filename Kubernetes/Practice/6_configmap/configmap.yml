@@ -1,0 +1,13 @@
+---
+# 1 configmap можно подключать к многим приложениям
+# Не подходит для хранения secrets
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config-env
+data:
+  dbhost: porstresql1
+  DEBUG: "false"
+
+...
