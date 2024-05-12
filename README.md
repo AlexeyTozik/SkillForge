@@ -51,13 +51,30 @@
 
 ### MongoDB
 
+### ClickHouse
+
+🌀 [Установка](Databases/ClickHouse/installation.md)<br>
+🌀 [Базовая конфигурация](Databases/ClickHouse/basic_conf.md)<br>
+🌀 [Настройка логирования](Databases/ClickHouse/logging.md)<br>
+🌀 [Настройка пользователей](Databases/ClickHouse/users.md)<br>
+🌀 [Настройка профилей](Databases/ClickHouse/profiles.md)<br>
+🌀 [Настройка квот](Databases/ClickHouse/quotas.md)<br>
+🌀 [Подключение SSL](Databases/ClickHouse/ssl.md)<br>
+🌀 [Мониторинг ноды](Databases/ClickHouse/node_monitoring.md)<br>
+🌀 [Шардирование кластера](Databases/ClickHouse/sharding.md)<br>
+🌀 [Установка zookeeper](Databases/ClickHouse/zookeeper.md)<br>
+🌀 [Настройка репликации](Databases/ClickHouse/replication.md)<br>
+🌀 [Восстановление после сбоя](Databases/ClickHouse/restore.md)<br>
+🌀 [Подключение dictionaries](Databases/ClickHouse/dictionary.md)<br>
+🌀 [Бэкапы](Databases/ClickHouse/backups.md)<br>
+
 ### MySQL
 
-🌀 [Основные команды](MySQL/README.md)<br>
+🌀 [Основные команды](Databases/MySQL/README.md)<br>
 
 Общая теория:
 
-💥 [Шарнирование]()
+💥 [Шардирование]()
 💥 Секционирование
 💥 Организация хранища данных
 💥 Транзакции
@@ -122,4 +139,3 @@
 ## Bash
 
 ---
-

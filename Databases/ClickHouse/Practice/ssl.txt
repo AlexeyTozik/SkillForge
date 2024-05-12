@@ -1,0 +1,53 @@
+????
+certbot.eff.org
+
+or
+
+openssl req -subj "/CN=localhost" -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /etc/clickhouse-server/server.key -out /etc/clickhouse-server/server.crt
+
+
+
+openssl dhparam -out /etc/clickhouse-server/dhparam.pem 4096
+
+
+cd /etc/clickhouse-server
+
+sudo chown clickhouse:clickhouse server.crt
+sudo chown clickhouse:clickhouse server.key
+sudo chown clickhouse:clickhouse dhparam.pem
+
+
+/etc/clickhouse-server/config.xml
+<yandex>
+    <https_port>8443</https_port>
+    <tcp_port_secure>9440</tcp_port_secure>
+    <!--
+    <http_port>8123</http_port>
+    <tcp_port>9000</tcp_port>
+    -->
+</yandex>
+
+
+
+<yandex>
+  <openSSL>
+    <server>
+      <certificateFile>/etc/clickhouse-server/server.crt</certificateFile
+      <privateKeyFile>/etc/clickhouse-server/server.key</privateKeyFile>
+      <dhParamsFile>/etc/clickhouse-server/dhparam.pem</dhParamsFile>
+      <verificationMode>none</verificationMode>
+      <loadDefaultCAFile>true</loadDefaultCAFile>
+      <cacheSessions>false</cacheSessions> 
+      <disableProtocols>sslv2,sslv3</disableProtocols> 
+      <preferServerCiphers>true</preferServerCiphers>
+    </server>
+  </openSSL>
+</yandex>
+
+
+
+
+
+
+/etc/clickhouse-client/config.xml
+<verificationMode>none</verificationMode>

@@ -1,0 +1,36 @@
+<logger>
+        <level>information</level>
+        <size>3000M</size>
+</logger>
+
+.....
+    <query_log>
+        <database>system</database>
+        <table>queries</table>
+        <partition_by>toYYYYMM(event_date)</partition_by>
+        <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+    </query_log>
+.....
+
+
+clickhouse-client
+:) set log_queries = 1
+set log_query_threads = 1
+
+or
+
+cat /etc/clickhouse-server/users.xml
+<?xml version="1.0"?>
+<yandex>
+    <profiles>
+        <default>
+            <log_queries replace="replace">1</log_queries>
+        </default>
+    </profiles>
+</yandex>
+
+
+clickhouse-client
+
+select 1;
+select * from system.queries where query='select 1;';

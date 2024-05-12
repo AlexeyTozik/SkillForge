@@ -1,0 +1,86 @@
+Данные действия необходимо производить на двух нодах
+
+vim /etc/clickhouse-server/config.xml
+
+    <remote_servers incl="clickhouse_remote_servers">
+    </remote_servers>
+    <include_from>/etc/clickhouse-server/cluster.xml</include_from>
+
+
+
+vim /etc/clickhouse-server/cluster.xml
+
+<?xml version="1.0"?>
+<yandex>
+    <clickhouse_remote_servers>
+        <local> // Название кластера
+            <shard>
+                <replica>
+                    <host>167.99.142.32</host> // первая нода в нашем кластере
+                    <port>9000</port>
+                </replica>
+						</shard>
+						<shard>
+                <replica>
+                    <host>159.65.123.161</host> // вторая нода в нашем кластере
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </local>
+    </clickhouse_remote_servers>
+</yandex>
+
+
+vim /etc/clickhouse-server/config.xml
+
+<listen_host>0.0.0.0</listen_host>
+
+
+sudo chown clickhouse:clickhouse /etc/clickhouse-server/cluster.xml
+service clickhouse-server status
+
+
+
+CREATE TABLE ch_local
+(
+    id Int64,
+    title String,
+    description String,
+    content String,
+    date Date
+)
+ENGINE = MergeTree()
+PARTITION BY date
+ORDER BY id;
+
+
+CREATE TABLE ch_distributed
+(
+    id Int64,
+    title String,
+    description String,
+    content String,
+    date Date
+)
+ENGINE = Distributed('local', 'default', 'ch_local', rand());
+
+
+
+#  clickhouse-client --query "INSERT INTO ch_distributed FORMAT CSV" < ch_distributed.csv
+
+clickhouse-client
+INSERT INTO ch_distributed (id, title, description, content, date) VALUES(1, 'title', 'desc', 'content', '2018-07-03')
+
+
+SELECT count(*)
+FROM ch_distributed
+
+Query id: 1611236f-d12b-4b24-9ac9-44f854232d3a7
+
+┌─count()─┐
+│      10 │
+└─────────┘
+
+1 rows in set. Elapsed: 0.013 sec. 
+
+

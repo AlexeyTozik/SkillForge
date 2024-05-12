@@ -1,0 +1,62 @@
+CREATE DATABASE db;
+use db;
+
+CREATE TABLE local_data
+(
+    id Int64,
+    title String,
+    description String,
+    content String,
+    date Date
+)
+ENGINE = MergeTree()
+PARTITION BY date
+ORDER BY id;
+
+
+INSERT INTO local_data (id, title, description, content, date) VALUES(1, 'title', 'desc', 'content', '2020-10-10')
+INSERT INTO local_data (id, title, description, content, date) VALUES(2, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(3, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(4, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(5, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(6, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(7, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(8, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(9, 'title', 'desc', 'content', '2018-07-03')
+INSERT INTO local_data (id, title, description, content, date) VALUES(10, 'title', 'desc', 'content', '2018-07-03')
+
+
+select count(*) from local_data
+┌─count()─┐
+│      10 │
+└─────────┘
+
+
+
+SELECT partition, table, database FROM system.parts WHERE active AND database = 'db';
+
+
+┌─partition──┬─table──────┬─database─┐
+│ 2020-10-10 │ local_data │ db       │
+└────────────┴────────────┴──────────┘
+
+1 rows in set. Elapsed: 0.005 sec. 
+
+
+ALTER TABLE db.local_data FREEZE PARTITION '2020-10-10';
+
+
+mkdir -p /opt/ch/backups
+cp -dpr /var/lib/clickhouse/shadow/1 /opt/ch/backups
+cp -r  /var/lib/clickhouse/metadata/db /opt/ch/backups/
+chown -R clickhouse:clickhouse /opt/ch/backups
+
+
+cat /opt/ch/backups/db/local_data.sql | clickhouse-client --database db_restore
+
+
+cp -r /opt/ch/backups/1 /var/lib/clickhouse/data/db_restore/local_data/detached/
+use db_restore
+ALTER TABLE db_restore.local_data ATTACH PARTITION '2020-10-10'
+
+

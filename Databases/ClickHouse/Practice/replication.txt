@@ -1,0 +1,139 @@
+<zookeeper incl="zookeeper-servers" optional="true" />
+<macros incl="macros" optional="true" />
+
+
+ch1
+
+<?xml version="1.0"?>
+<yandex>
+    <clickhouse_remote_servers>
+        <local> // Название кластера
+            <shard>
+                <internal_replication>true</internal_replication>
+                <replica>
+                    <host>134.122.65.133</host> // Первая нода одного шарда
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>134.122.65.121</host> // Вторая нода одного шарда
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </local>
+    </clickhouse_remote_servers>
+
+    <zookeeper-servers>
+        <node index="1">
+            <host>134.122.65.133</host> // сервер зукипер
+            <port>2181</port> // порт для подключения
+        </node>
+    </zookeeper-servers>
+
+    <macros>
+        <cluster>local</cluster> // название кластера
+        <replica>134.122.65.133</replica> // Адрес данной машины
+        <shard>01</shard> // Шард данной машины
+    </macros>
+</yandex>
+
+/etc/init.d/clickhouse-server restart
+root@ch1:/opt/zookeeper# service clickhouse-server status
+
+
+ch2
+
+<?xml version="1.0"?>
+<yandex>
+    <clickhouse_remote_servers>
+        <local> // Название кластера
+            <shard>
+                <internal_replication>true</internal_replication>
+                <replica>
+                    <host>134.122.65.133</host> // Первая нода одного шарда
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>134.122.65.121</host> // Вторая нода одного шарда
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </local>
+    </clickhouse_remote_servers>
+
+    <zookeeper-servers>
+        <node index="1">
+            <host>134.122.65.133</host> // сервер зукипер
+            <port>2181</port> // порт для подключения
+        </node>
+    </zookeeper-servers>
+
+    <macros>
+        <cluster>local</cluster> // название кластера
+        <replica>134.122.65.121</replica> // Адрес данной машины
+        <shard>02</shard> // Шард данной машины
+    </macros>
+</yandex>
+
+
+/etc/init.d/clickhouse-server restart
+root@ch2:/opt/zookeeper# service clickhouse-server status
+
+
+
+выполняем только на одной ноде
+CREATE TABLE ch_replicated_local ON CLUSTER local
+(
+    id Int64,
+    title String,
+    description String,
+    content String,
+    date Date
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/{cluster}/tables/ch_replicated_local', '{replica}')
+PARTITION BY date
+ORDER BY id;
+
+
+CREATE TABLE ch_replicated_distributed ON CLUSTER local
+(
+    id Int64,
+    title String,
+    description String,
+    content String,
+    date Date
+)
+ENGINE = Distributed('{cluster}', 'default', 'ch_replicated_local', rand());
+
+
+insert with clickhouse client on ch1
+INSERT INTO ch_replicated_distributed (id, title, description, content, date) VALUES(1, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_distributed (id, title, description, content, date) VALUES(2, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_distributed (id, title, description, content, date) VALUES(3, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_distributed (id, title, description, content, date) VALUёёES(4, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_distributed (id, title, description, content, date) VALUES(5, 'title', 'desc', 'content', '2020-07-03')
+
+
+INSERT INTO ch_replicated_local (id, title, description, content, date) VALUES(1, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_local (id, title, description, content, date) VALUES(2, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_local (id, title, description, content, date) VALUES(3, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_local (id, title, description, content, date) VALUES(4, 'title', 'desc', 'content', '2020-07-03')
+INSERT INTO ch_replicated_local (id, title, description, content, date) VALUES(5, 'title', 'desc', 'content', '2020-07-03
+
+
+
+SELECT count(*)
+FROM ch_replicated_local
+
+SELECT count(*)
+FROM ch_replicated_distributed
+
+
+при возникновении проблем или если необходимо удалить реплику идем в zookeeper
+cd /opt/zookeeper
+./bin/zkCli.sh -server localhost:2181
+удаляем реплику если нужно (rmr ? delete)
+delete /clickhouse/tables/tx/replicas/srv1
+
+перезагружаем clickhouse
+создаем таблицы заново
+
