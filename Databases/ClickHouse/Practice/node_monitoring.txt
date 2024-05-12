@@ -1,0 +1,17 @@
+cat /etc/clickhouse-server/config.xml
+
+<prometheus>
+    <endpoint>/metrics</endpoint>
+    <port>9363</port>
+
+    <metrics>true</metrics>
+    <events>true</events>
+    <asynchronous_metrics>false</asynchronous_metrics>
+    <status_info>false</status_info>
+</prometheus>
+
+
+
+sudo service clickhouse-server restart
+
+curl http://localhost:9363/metrics

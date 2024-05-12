@@ -1,0 +1,82 @@
+CREATE TABLE local_posts
+(
+    id Int64,
+    title String,
+    description String,
+    content String,
+    user_id Int64,
+    date Date
+)
+ENGINE = MergeTree()
+PARTITION BY date
+ORDER BY id;
+
+
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(1, 'title', 'desc', 'content', 1, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(2, 'title', 'desc', 'content', 1, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(3, 'title', 'desc', 'content', 1, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(4, 'title', 'desc', 'content', 1, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(5, 'title', 'desc', 'content', 1, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(6, 'title', 'desc', 'content', 2, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(7, 'title', 'desc', 'content', 2, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(8, 'title', 'desc', 'content', 2, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(9, 'title', 'desc', 'content', 2, '2018-07-03')
+INSERT INTO local_posts (id, title, description, content, user_id, date) VALUES(10, 'title', 'desc', 'content', 2, '2018-07-03')
+
+select count(*) from local_posts
+
+┌─count()─┐
+│      10 │
+└─────────┘
+
+
+
+cat /var/lib/clickhouse/user_files/users.csv
+
+1,test2@xample.com
+2,test2@xample.com
+
+
+sudo chown clickhouse:clickhouse /var/lib/clickhouse/user_files/users.csv
+
+
+CREATE DICTIONARY local_users_dict
+(
+  user_id UInt64 DEFAULT 0,
+  email String DEFAULT ''
+)
+PRIMARY KEY user_id
+SOURCE(FILE(path '/var/lib/clickhouse/user_files/users.csv' format 'CSV'))
+SETTINGS(format_csv_allow_single_quotes = 1)
+LAYOUT(COMPLEX_KEY_HASHED)
+LIFETIME(300)
+
+
+
+select id, title, description, content, dictGetString('default.local_users_dict', 'email', (toUInt64(user_id), )), date AS user_email  from local_posts;
+
+SELECT
+    id,
+    title,
+    description,
+    content,
+    dictGetString('default.local_users_dict', 'email', tuple(toUInt64(user_id))),
+    date AS user_email
+FROM local_posts
+
+Query id: 00a7b913-797d-49dc-9998-4cd8cc8209de
+
+┌─id─┬─title─┬─description─┬─content─┬─dictGetString('default.local_users_dict', 'email', tuple(toUInt64(user_id)))─┬─user_email─┐
+│  1 │ title │ desc        │ content │ test1@xample.com                                                             │ 2018-07-03 │
+│  2 │ title │ desc        │ content │ test1@xample.com                                                             │ 2018-07-03 │
+│  3 │ title │ desc        │ content │ test1@xample.com                                                             │ 2018-07-03 │
+│  4 │ title │ desc        │ content │ test1@xample.com                                                             │ 2018-07-03 │
+│  5 │ title │ desc        │ content │ test1@xample.com                                                             │ 2018-07-03 │
+│  6 │ title │ desc        │ content │ test2@xample.com                                                             │ 2018-07-03 │
+│  7 │ title │ desc        │ content │ test2@xample.com                                                             │ 2018-07-03 │
+│  8 │ title │ desc        │ content │ test2@xample.com                                                             │ 2018-07-03 │
+│  9 │ title │ desc        │ content │ test2@xample.com                                                             │ 2018-07-03 │
+│ 10 │ title │ desc        │ content │ test2@xample.com                                                             │ 2018-07-03 │
+└────┴───────┴─────────────┴─────────┴──────────────────────────────────────────────────────────────────────────────┴────────────┘
+
+10 rows in set. Elapsed: 0.012 sec. 

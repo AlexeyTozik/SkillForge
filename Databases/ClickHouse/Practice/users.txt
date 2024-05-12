@@ -1,0 +1,15 @@
+cat /etc/clickhouse-server/users.xml
+
+<yandex>
+....
+    <users>
+        <ch_user>
+            <password>ch_password</password>
+            <access_management>0</access_management>
+            <networks incl="networks" replace="replace">
+                <ip>127.0.0.1</ip>
+            </networks>
+        </ch_user>
+    </users>
+....
+</yandex>

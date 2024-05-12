@@ -1,0 +1,23 @@
+cat config.d/main.xml
+<?xml version="1.0"?>
+<yandex>
+        <http_port>8125</http_port>
+        <max_connections>100</max_connections>
+        <http_server_default_response><![CDATA[You reached CH http port]]></http_server_default_response>
+	<timezone>Europe/Moscow</timezone>
+</yandex>
+root@node1:/etc/clickhouse-server# pwd
+/etc/clickhouse-server
+root@node1:/etc/clickhouse-server#
+
+
+
+
+cat /etc/clickhouse-server/config.d/main.xml
+<?xml version="1.0"?>
+<yandex>
+        <http_port>8125</http_port>
+        <max_connections>100</max_connections>
+        <http_server_default_response><![CDATA[You reached CH http port]]></http_server_default_response>
+	<timezone>UTC</timezone>
+</yandex>

@@ -1,0 +1,17 @@
+cat /etc/clickhouse-server/users.xml
+
+<yandex>
+....
+    <quotas>
+        <user>
+            <interval>
+                <duration>3600</duration>
+                <queries>100</queries>
+                <errors>0</errors>
+                <result_rows>0</result_rows>
+                <read_rows>10000000</read_rows>
+                <execution_time>0</execution_time>
+            </interval>
+        </user>
+    </quotas>
+</yandex>
